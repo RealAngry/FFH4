@@ -10,7 +10,9 @@
     "clear-data": "node seeder.js -d",
     "build-client": "cd .. && npm run build",
     "production": "npm run postinstall && npm run build-client && cross-env NODE_ENV=production node server.js",
-    "init-bot": "node scripts/initBotDirectories.js"
+    "init-bot": "node scripts/initBotDirectories.js",
+    "vercel-build": "echo 'Building for Vercel deployment'",
+    "vercel-deploy": "vercel --prod"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -27,7 +29,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
-    "vite": "^5.4.2"
+    "vite": "^5.4.2",
+    "vercel": "^32.5.0"
   },
   "engines": {
     "node": ">=18.0.0"
