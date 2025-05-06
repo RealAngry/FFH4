@@ -12,6 +12,34 @@
   ],
   "routes": [
     {
+      "src": "/api/diagnostics",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/test",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/status",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/auth/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/users/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/students/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
+      "src": "/api/export/(.*)",
+      "dest": "/api/index.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/index.js"
     },
