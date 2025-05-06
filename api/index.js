@@ -9,6 +9,12 @@ dotenv.config();
 // Create Express app
 const app = express();
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 // Body parser
 app.use(express.json());
 
@@ -27,6 +33,13 @@ app.get('/api/diagnostics', (req, res) => {
       environment: process.env.NODE_ENV || 'unknown',
       timestamp: new Date().toISOString(),
       nodeVersion: process.version,
+      requestInfo: {
+        path: req.path,
+        originalUrl: req.originalUrl,
+        baseUrl: req.baseUrl,
+        host: req.get('host'),
+        method: req.method
+      },
       env: {
         mongodb_uri_exists: !!process.env.MONGODB_URI,
         jwt_secret_exists: !!process.env.JWT_SECRET,
@@ -145,6 +158,35 @@ app.get('/', (req, res) => {
     });
   }
 })();
+
+// 404 handler - must be defined AFTER all other routes
+app.use('/api/*', (req, res) => {
+  console.log(`404 Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({
+    success: false,
+    error: 'API Route Not Found',
+    path: req.originalUrl,
+    available_endpoints: [
+      '/api/diagnostics',
+      '/api/test',
+      '/api/status',
+      '/api/auth/*',
+      '/api/users/*',
+      '/api/students/*',
+      '/api/export/*'
+    ]
+  });
+});
+
+// Catch-all route handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Not Found',
+    message: 'The requested resource does not exist',
+    path: req.originalUrl
+  });
+});
 
 // Enhanced error handling middleware (should be after all routes)
 app.use((err, req, res, next) => {
